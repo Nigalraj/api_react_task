@@ -14,7 +14,8 @@ function App() {
       <>
         <Header />
         <Row className="mx-0">
-          <Col lg={2} className="px-0  bg-side">
+          <Col lg={2} className="px-0 hi bg-side">
+
             <Sidebar />
           </Col>
           <Col lg={10} className="px-0">
