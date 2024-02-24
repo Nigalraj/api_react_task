@@ -6,6 +6,18 @@
   background-color: #F3F3F3;
 }
 .active-link {
-  background-color: green; /* Change this to your desired background color */
-  /* Add any other styles as needed */
+  background-color: green; 
+  
+}
+.user-list-container {
+  max-height: 250px; 
+}
+
+
+.open{
+  background-color: whitesmoke!important;
+}
+
+.close{
+  background-color: peachpuff !important;
 }

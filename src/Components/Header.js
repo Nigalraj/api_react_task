@@ -1,10 +1,10 @@
-import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import logo from "../Asset/images.png";
-import { Icon } from "@iconify/react";
-import Sidebar from "./Sidebar";
 import { NavLink, useLocation } from "react-router-dom";
+import { Icon } from "@iconify/react";
+import { useState } from "react";
+import Sidebar from "./Sidebar";
+import logo from "../Asset/images.png";
 
 function Header() {
     const location = useLocation();
@@ -28,64 +28,7 @@ function Header() {
               <Offcanvas.Title>Offcanvas</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-              <div className="d-flex flex-column vh-100">
-                <NavLink
-                  to="/dashboard"
-                  className={`text-decoration-none text-dark p-3  ${
-                    location.pathname === "/dashboard" ? "bg-light" : ""
-                  }`}
-                >
-                  Dashboard
-                </NavLink>
-                <NavLink
-                  to="/issue"
-                  className={`text-decoration-none text-dark p-3  ${
-                    location.pathname === "/issue" ? "bg-light" : ""
-                  }`}
-                >
-                  Issue
-                </NavLink>
-                <NavLink
-                  to="/attachment"
-                  className={`text-decoration-none text-dark p-3  ${
-                    location.pathname === "/attachment" ? "bg-light" : ""
-                  }`}
-                >
-                  Attachment
-                </NavLink>
-                <NavLink
-                  to="/status"
-                  className={`text-decoration-none text-dark p-3  ${
-                    location.pathname === "/status" ? "bg-light" : ""
-                  }`}
-                >
-                  Status
-                </NavLink>
-                <NavLink
-                  to="/review"
-                  className={`text-decoration-none text-dark p-3  ${
-                    location.pathname === "/review" ? "bg-light" : ""
-                  }`}
-                >
-                  Review
-                </NavLink>
-                <NavLink
-                  to="/denied"
-                  className={`text-decoration-none text-dark p-3  ${
-                    location.pathname === "/denied" ? "bg-light" : ""
-                  }`}
-                >
-                  Denied
-                </NavLink>
-                <NavLink
-                  to="/pending"
-                  className={`text-decoration-none text-dark p-3  ${
-                    location.pathname === "/pending" ? "bg-light" : ""
-                  }`}
-                >
-                  Pending
-                </NavLink>
-              </div>
+              <Sidebar/>
             </Offcanvas.Body>
           </Offcanvas>
         </div>

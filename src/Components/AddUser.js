@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { Form, Button } from "react-bootstrap";
 
-const UserForm = ({ authToken , close}) => {
+const UserForm = ( close ) => {
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -25,7 +25,7 @@ const UserForm = ({ authToken , close}) => {
           values,
           {
             headers: {
-              Authorization: `Bearer ${authToken}`,
+              Authorization: `Bearer 7ba28fd99cf99393c57d796ef80869a17bb6fb2b1d9d21ff02de0ed0711489c7`,
             },
           }
         );
@@ -36,14 +36,16 @@ const UserForm = ({ authToken , close}) => {
       }
     },
   });
+ 
 
   return (
     <Form onSubmit={formik.handleSubmit}>
       <Form.Group className="mb-3">
-        <Form.Label>Name:</Form.Label>
+        <Form.Label htmlFor="name">Name:</Form.Label>
         <Form.Control
           type="text"
           name="name"
+          id="nameß"
           value={formik.values.name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
