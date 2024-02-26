@@ -4,20 +4,17 @@ import { NavLink, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
 import Sidebar from "./Sidebar";
-import logo from "../Asset/images.png";
+import imagepath from "../Asset/images.png";
 
 function Header() {
-    const location = useLocation();
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
   return (
     <>
       <div className="bg-head d-flex justify-content-between align-items-center px-2">
         <div>
-          <img src={logo} alt="Logo" width="150" />
+          <img src={imagepath} alt="Logo" width="150" />
         </div>
         <div className="d-lg-none">
           <Button onClick={handleShow} className="bg-head border-0">

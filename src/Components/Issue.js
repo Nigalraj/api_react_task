@@ -5,14 +5,21 @@ import Adduser from "./AddUser";
 import EditForm from "./EditUser";
 import {
   Container,
-  Table,
   InputGroup,
   FormControl,
   Button,
   ModalBody,
 } from "react-bootstrap";
+
+import { Icon } from "@iconify/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEdit,
+  faTrashAlt,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
+import Table from "./Tables";
+import { columns } from "../utils/data";
 
 const MyComponent = () => {
   const [show, setShow] = useState(false);
@@ -23,17 +30,16 @@ const MyComponent = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
-  const columns = ["id", "name", "email", "gender", "status", "Edit", "Delete"];
+  const [itemsPerPage] = useState(7);
 
   const onDeleteClick = async (id) => {
+
     try {
       await axios.delete(`https://gorest.co.in/public/v2/users/${id}`, {
         headers: {
           Authorization: `Bearer 7ba28fd99cf99393c57d796ef80869a17bb6fb2b1d9d21ff02de0ed0711489c7`,
         },
       });
-
       const updatedData = data.data.filter((item) => item.id !== id);
       setData(updatedData);
     } catch (error) {
@@ -83,7 +89,7 @@ const MyComponent = () => {
 
   useEffect(() => {
     fetchData();
-  }, [data]);
+  }, []);
 
   const filteredData = data.filter((item) =>
     Object.values(item).some((value) =>
@@ -94,7 +100,6 @@ const MyComponent = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const handleNextPage = () => {
@@ -103,7 +108,7 @@ const MyComponent = () => {
 
   const handleClose = () => {
     setShow(false);
-    setModalData(false)
+    setModalData(false);
     setSelectedRow(null);
   };
 
@@ -147,48 +152,7 @@ const MyComponent = () => {
         </div>
       </div>
       <div style={{ overflowX: "auto" }}>
-        <Table striped bordered hover>
-          <thead className="thead-dark">
-            <tr>
-              {columns.map((column) => (
-                <th key={column}>{column}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {currentItems.map((item) => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.name}</td>
-                <td>{item.email}</td>
-                <td>{item.gender}</td>
-                <td>{item.status}</td>
-                <td>
-                  <Button
-                    variant="primary"
-                    onClick={() => {
-                      handleEditClick(item.id);
-                      handleModalData();
-                    }}
-                    className="edit-button"
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                  </Button>
-                </td>
-
-                <td>
-                  <button
-                    onClick={() => onDeleteClick(item.id)}
-                    className="delete-button"
-                  >
-                    <FontAwesomeIcon icon={faTrashAlt} />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-
+        <Table columns={columns} currentItems={currentItems} handleEditClick={handleEditClick} handleModalData={handleModalData} onDeleteClick={onDeleteClick}/>
         <ul className="pagination">
           <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
             <button className="page-link" onClick={handlePrevPage}>
@@ -230,7 +194,7 @@ const MyComponent = () => {
             <EditForm
               data={data.find((item) => item.id === selectedRow)}
               onUpdateClick={(updatedData) =>
-              onUpdateClick(selectedRow, updatedData)
+                onUpdateClick(selectedRow, updatedData)
               }
               onCancel={handleClose}
             />

@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import {columns_1}  from '../utils/data';
 
 const UserDetails = () => {
   
   const { userId } = useParams();
   const [userDetails, setUserDetails] = useState(null);
-
-  const columns = [
-    { key: 'id', label: 'Id:' },
-    { key: 'name', label: 'Name:' },
-    { key: 'email', label: 'Email:' },
-    { key: 'gender', label: 'Gender:' },
-    { key: 'status', label: 'Status:' },
-  ];
 
   useEffect(() => {
     if (userId) {
@@ -42,7 +35,7 @@ const UserDetails = () => {
         <table className="table table-bordered">
         <thead className="thead-dark">
       <tr>
-        {columns.map((column) => (
+        {columns_1.map((column) => (
           <th key={column.key} scope="col">
             {column.label}
           </th>

@@ -3,12 +3,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Accordion, AccordionButton, AccordionCollapse } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
+import { columns_2 } from "../utils/data";
 
 function Sidebar({ onSelectUser }) {
   const location = useLocation();
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
-  const [isAccordionOpen, setIsAccordionOpen] = useState("");
+  const [isAccordionOpen, setIsAccordionOpen] = useState("search");
 
   const toggleAccordion = (title) => {
     setIsAccordionOpen(title);
@@ -48,7 +49,7 @@ function Sidebar({ onSelectUser }) {
         className={`custom-accordion-button ${isAccordionOpen === "Id" ? 'open' : 'close'}`}
         onClick={() => toggleAccordion("Id")}
       >
-        Id
+       Id
       </AccordionButton>
       <AccordionCollapse eventKey="0">
         <Accordion.Body className="overflow-auto">

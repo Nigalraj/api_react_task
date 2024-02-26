@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { Form, Button } from "react-bootstrap";
 
-const UserForm = ( close ) => {
+const UserForm = ( {close} ) => {
   const formik = useFormik({
     initialValues: {
       name: "",
