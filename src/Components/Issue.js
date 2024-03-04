@@ -8,38 +8,25 @@ import {
   InputGroup,
   FormControl,
   Button,
-  ModalBody,
 } from "react-bootstrap";
-
-import { Icon } from "@iconify/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEdit,
-  faTrashAlt,
-  faPenToSquare,
-} from "@fortawesome/free-solid-svg-icons";
 import Table from "./Tables";
 import { columns } from "../utils/data";
+import { headers } from "../utils/data";
 
 const MyComponent = () => {
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
   const [modalData, setModalData] = useState(false);
-  const handleShow = () => setShow(true);
-  const handleModalData = () => setModalData(true);
+
   const [selectedRow, setSelectedRow] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(7);
+  const [itemsPerPage] = useState(9);
 
   const onDeleteClick = async (id) => {
-
     try {
-      await axios.delete(`https://gorest.co.in/public/v2/users/${id}`, {
-        headers: {
-          Authorization: `Bearer 7ba28fd99cf99393c57d796ef80869a17bb6fb2b1d9d21ff02de0ed0711489c7`,
-        },
-      });
+      await axios.delete(`https://gorest.co.in/public/v2/users/${id}`,headers);
+      fetchData();
       const updatedData = data.data.filter((item) => item.id !== id);
       setData(updatedData);
     } catch (error) {
@@ -51,19 +38,12 @@ const MyComponent = () => {
     try {
       await axios.put(
         `https://gorest.co.in/public/v2/users/${id}`,
-        updatedData,
-        {
-          headers: {
-            Authorization: `Bearer 7ba28fd99cf99393c57d796ef80869a17bb6fb2b1d9d21ff02de0ed0711489c7`,
-          },
-        }
-      );
+        updatedData,headers);
 
       const updatedDataList = data.map((item) =>
         item.id === id ? { ...item, ...updatedData } : item
       );
       setData(updatedDataList);
-
       setSelectedRow(null);
       console.log("Updated Data:", { id, updatedData });
     } catch (error) {
@@ -74,13 +54,7 @@ const MyComponent = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://gorest.co.in/public/v2/users?page=1&per_page=100",
-        {
-          headers: {
-            Authorization: `Bearer 7ba28fd99cf99393c57d796ef80869a17bb6fb2b1d9d21ff02de0ed0711489c7`,
-          },
-        }
-      );
+        "https://gorest.co.in/public/v2/users?page=1&per_page=100",headers);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -122,8 +96,8 @@ const MyComponent = () => {
 
   return (
     <Container>
-      <div className="row my-3">
-        <div className="col-6">
+      <div className="row d-md-flex justify-content-between my-3">
+        <div className="col-6 col-md-5 mt-3">
           <InputGroup className="">
             <FormControl
               type="text"
@@ -133,11 +107,11 @@ const MyComponent = () => {
             />
           </InputGroup>
         </div>
-        <div className="col-6">
+        <div className="col-6 col-md-3">
           <Button
             variant="primary"
-            onClick={handleShow}
-            className="btn bg-primary w-100 text-white "
+             onClick={() => setShow(true)}
+            className="btn-hover color m-0 w-100 text-white "
           >
             Add New User
           </Button>
@@ -146,13 +120,13 @@ const MyComponent = () => {
               <Modal.Title>Add New User</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Adduser close={handleClose} />
+              <Adduser close={handleClose} fetchData={fetchData} />
             </Modal.Body>
           </Modal>
         </div>
       </div>
       <div style={{ overflowX: "auto" }}>
-        <Table columns={columns} currentItems={currentItems} handleEditClick={handleEditClick} handleModalData={handleModalData} onDeleteClick={onDeleteClick}/>
+        <Table columns={columns} currentItems={currentItems} handleEditClick={handleEditClick} setModalData={setModalData} onDeleteClick={onDeleteClick} fetchData={fetchData}/>
         <ul className="pagination">
           <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
             <button className="page-link" onClick={handlePrevPage}>

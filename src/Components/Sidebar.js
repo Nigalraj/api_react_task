@@ -1,12 +1,11 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink} from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Accordion, AccordionButton, AccordionCollapse } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-import { columns_2 } from "../utils/data";
+import {headers, user} from '../utils/data'
 
 function Sidebar({ onSelectUser }) {
-  const location = useLocation();
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
   const [isAccordionOpen, setIsAccordionOpen] = useState("search");
@@ -17,11 +16,7 @@ function Sidebar({ onSelectUser }) {
   
   useEffect(() => {
     axios
-      .get("https://gorest.co.in/public/v2/users?page=1&per_page=100", {
-        headers: {
-          Authorization: `Bearer 7ba28fd99cf99393c57d796ef80869a17bb6fb2b1d9d21ff02de0ed0711489c7`,
-        },
-      })
+      .get("https://gorest.co.in/public/v2/users?page=1&per_page=100",headers)
       .then((response) => {
         setUsers(response.data);
       })
@@ -36,11 +31,11 @@ function Sidebar({ onSelectUser }) {
   return (
     <div className=" d-flex flex-column  vh-100 w-100">
       <NavLink
-        to="/Search"
-        className={`text-decoration-none text-dark p-3  ${isAccordionOpen === "search" ? 'open':'close'}`}
+        to="/"
+        className={`text-decoration-none  p-3  ${isAccordionOpen === "search" ? 'open':'close'}`}
         onClick={() => toggleAccordion("search")}
       >
-        Search
+        {user.dashboard}
       </NavLink>
       <Accordion>
       <Accordion.Item eventKey="0" className="border-0 rounded-0">
@@ -49,7 +44,7 @@ function Sidebar({ onSelectUser }) {
         className={`custom-accordion-button ${isAccordionOpen === "Id" ? 'open' : 'close'}`}
         onClick={() => toggleAccordion("Id")}
       >
-       Id
+       {user.id}
       </AccordionButton>
       <AccordionCollapse eventKey="0">
         <Accordion.Body className="overflow-auto">
@@ -82,7 +77,7 @@ function Sidebar({ onSelectUser }) {
         className={`custom-accordion-button ${isAccordionOpen === "Name" ? 'open' : 'close'}`}
         onClick={ () =>toggleAccordion("Name")}
       >
-        Name
+        {user.name}
       </AccordionButton>
           <Accordion.Body className="overflow-auto">
             <div className="user-list-container">
@@ -116,7 +111,7 @@ function Sidebar({ onSelectUser }) {
         className={`custom-accordion-button ${isAccordionOpen === "Email" ? 'open' : 'close'}`}
         onClick={ () =>toggleAccordion("Email")}
       >
-        Email
+        {user.email}
       </AccordionButton>
           <Accordion.Body className="overflow-auto">
             <div className="user-list-container">

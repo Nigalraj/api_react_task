@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import {columns_1}  from '../utils/data';
+import {columns_1, headers}  from '../utils/data';
 
 const UserDetails = () => {
   
@@ -10,12 +10,7 @@ const UserDetails = () => {
 
   useEffect(() => {
     if (userId) {
-      axios.get(`https://gorest.co.in/public/v2/users/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer 7ba28fd99cf99393c57d796ef80869a17bb6fb2b1d9d21ff02de0ed0711489c7`,
-          },
-        })
+      axios.get(`https://gorest.co.in/public/v2/users/${userId}`,headers)
         .then(response => {
             setUserDetails(response.data)
         })
@@ -26,7 +21,6 @@ const UserDetails = () => {
   if (!userDetails) {
     return <div>Loading...</div>;
   }
-
 
   return (
     <div className="container mt-5">

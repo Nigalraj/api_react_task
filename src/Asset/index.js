@@ -1,4 +1,8 @@
-export const imagePaths = '../Asset/images.png';
-  
+ const imagePaths ={
+    logo:require( '../Asset/images.png'),
+ }
+
+ export  default imagePaths;
+
 
   

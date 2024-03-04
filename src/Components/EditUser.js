@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { genderOptions,adduser,user } from "../utils/data";
 
 const EditForm = ({ data, onUpdateClick, onCancel }) => {
   const [editedData, setEditedData] = useState({ ...data });
@@ -21,7 +22,7 @@ const EditForm = ({ data, onUpdateClick, onCancel }) => {
       <form>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
-            Name:
+            {user.name}
           </label>
           <input
             type="text"
@@ -33,7 +34,7 @@ const EditForm = ({ data, onUpdateClick, onCancel }) => {
         </div>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
-            Email:
+            {user.email}
           </label>
           <input
             type="email"
@@ -45,7 +46,7 @@ const EditForm = ({ data, onUpdateClick, onCancel }) => {
         </div>
         <div className="mb-3">
           <label htmlFor="gender" className="form-label">
-            Gender:
+           {user.gender}
           </label>
           <select
             name="gender"
@@ -53,14 +54,16 @@ const EditForm = ({ data, onUpdateClick, onCancel }) => {
             onChange={handleInputChange}
             className="form-select"
           >
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
+            {genderOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
           </select>
         </div>
         <div className="mb-3">
           <label htmlFor="status" className="form-label">
-            Status:
+            {user.status}
           </label>
           <input
             type="text"
@@ -69,12 +72,13 @@ const EditForm = ({ data, onUpdateClick, onCancel }) => {
             onChange={handleInputChange}
             className="form-control"
           />
+
         </div>
         <button type="button" onClick={handleUpdateClick} className="btn btn-primary">
-          Update
+          {adduser.update}
         </button>
         <button type="button" onClick={onCancel} className=" ms-2 btn btn-secondary">
-          Cancel
+          {adduser.cancel}
         </button>
       </form>
     </div>

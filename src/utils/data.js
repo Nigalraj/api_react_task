@@ -1,4 +1,4 @@
-const columns = ["id", "name", "email", "gender", "status", "Edit", "Delete"];
+const columns = ["Edit", "Id", "Name", "Email", "Gender", "Status", "Delete"];
 
 const columns_1 = [
     { key: 'id', label: 'Id:' },
@@ -10,4 +10,40 @@ const columns_1 = [
 
 const columns_2 = ["Id","Name","Emails"]
 
-export {columns, columns_1,columns_2};
+const user = {
+    dashboard:'Dashboard',
+    id:'Id',
+    name:'Name',
+    email:'Email'
+}
+
+const adduser = {
+    name:'Name:',
+    email:'Email:',
+    gender:'Gender:',
+    status:'Status:',
+    update:'Update',
+    cancel:'Cancel'
+}
+
+const genderOptions = [
+    { value: '', label: 'select' },
+    { value: 'male', label: 'male' },
+    { value: 'female', label: 'female' },
+  ];
+
+const statusOptions = [
+    { value: '', label: 'select' },
+    { value: 'active', label: 'active' },
+    { value: 'inactive', label: 'inactive' },
+  ];
+
+const headers = {
+    headers: {
+      Authorization: `Bearer 7ba28fd99cf99393c57d796ef80869a17bb6fb2b1d9d21ff02de0ed0711489c7`,
+    },
+};
+  
+ 
+
+export {columns, columns_1,columns_2,user,adduser,genderOptions,statusOptions,headers};

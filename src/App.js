@@ -6,18 +6,16 @@ import { Row, Col } from 'react-bootstrap';
 import Issue from './Components/Issue';
 import UserDetails from './Components/UserDetails';
 import './App.css';
-import { useLocation } from "react-router-dom";
+import Attachment from './Components/Attachment'
+
 
 function App() {
   const [selectedUser, setSelectedUser] = useState(null);
 
-  // const location = useLocation();
   const handleSelectUser = (user) => {
     setSelectedUser(user);
-    console.log(user);
-  };
   
-  // console.log(location.pathname);
+  };
 
   return (
     <Router>
@@ -31,9 +29,10 @@ function App() {
             <Routes>
               <Route
                 path="/UserDetails/:userId"
-                element={<UserDetails user={selectedUser}/>}
+                element={<UserDetails />}
               />
-              <Route path="/Search" element={<Issue />} />
+              <Route path="/" element={<Issue/>} />
+              <Route path="*" element={<Attachment/>} />
             </Routes>
           </Col>
         </Row>
