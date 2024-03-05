@@ -10,26 +10,28 @@ import {
   Button,
 } from "react-bootstrap";
 import Table from "./Tables";
-import { columns,headers,offcanvasTitleText,access,number } from "../utils/data";
-
+import { columns, headers, offcanvasTitleText, access, number } from "../utils/data";
 
 const MyComponent = () => {
-  const [show, setShow] = useState(false);
-  const [data, setData] = useState([]);
-  const [modalData, setModalData] = useState(false);
+  const [state, setState] = useState({
+    show: false,
+    data: [],
+    modalData: false,
+    selectedRow: null,
+    searchQuery: "",
+    currentPage: number[0],
+  });
 
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(number[0]);
+  const { show, data, modalData, selectedRow, searchQuery, currentPage } = state;
 
   const itemsPerPage = number[1];
 
   const onDeleteClick = async (id) => {
     try {
-      await axios.delete(`https://gorest.co.in/public/v2/users/${id}`,headers);
+      await axios.delete(`https://gorest.co.in/public/v2/users/${id}`, headers);
       fetchData();
       const updatedData = data.data.filter((item) => item.id !== id);
-      setData(updatedData);
+      setState((prevState) => ({ ...prevState, data: updatedData }));
     } catch (error) {
       console.error("Error deleting item:", error);
     }
@@ -37,15 +39,11 @@ const MyComponent = () => {
 
   const onUpdateClick = async (id, updatedData) => {
     try {
-      await axios.put(
-        `https://gorest.co.in/public/v2/users/${id}`,
-        updatedData,headers);
-
+      await axios.put(`https://gorest.co.in/public/v2/users/${id}`, updatedData, headers);
       const updatedDataList = data.map((item) =>
         item.id === id ? { ...item, ...updatedData } : item
-      ); 
-      setData(updatedDataList);
-      setSelectedRow(null);
+      );
+      setState((prevState) => ({ ...prevState, data: updatedDataList, selectedRow: null }));
       console.log("Updated Data:", { id, updatedData });
     } catch (error) {
       console.error("Error updating data:", error);
@@ -54,9 +52,8 @@ const MyComponent = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        "https://gorest.co.in/public/v2/users?page=1&per_page=100",headers);
-      setData(response.data);
+      const response = await axios.get("https://gorest.co.in/public/v2/users?page=1&per_page=100", headers);
+      setState((prevState) => ({ ...prevState, data: response.data }));
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -78,21 +75,19 @@ const MyComponent = () => {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const handleNextPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+    setState((prevState) => ({ ...prevState, currentPage: Math.min(prevState.currentPage + 1, totalPages) }));
   };
 
   const handleClose = () => {
-    setShow(false);
-    setModalData(false);
-    setSelectedRow(null);
+    setState((prevState) => ({ ...prevState, show: false, modalData: false, selectedRow: null }));
   };
 
   const handleEditClick = (id) => {
-    setSelectedRow(id);
+    setState((prevState) => ({ ...prevState, selectedRow: id }));
   };
 
   const handlePrevPage = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+    setState((prevState) => ({ ...prevState, currentPage: Math.max(prevState.currentPage - 1, 1) }));
   };
 
   return (
@@ -104,14 +99,14 @@ const MyComponent = () => {
               type="text"
               placeholder="Search "
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => setState((prevState) => ({ ...prevState, searchQuery: e.target.value }))}
             />
           </InputGroup>
         </div>
         <div className="col-6 col-md-3">
           <Button
             variant="primary"
-             onClick={() => setShow(true)}
+            onClick={() => setState((prevState) => ({ ...prevState, show: true }))}
             className="btn-hover color m-0 w-100 text-white "
           >
             {offcanvasTitleText[1]}
@@ -127,7 +122,7 @@ const MyComponent = () => {
         </div>
       </div>
       <div style={{ overflowX: "auto" }}>
-        <Table columns={columns} currentItems={currentItems} handleEditClick={handleEditClick} setModalData={setModalData} onDeleteClick={onDeleteClick} fetchData={fetchData}/>
+        <Table columns={columns} currentItems={currentItems} handleEditClick={handleEditClick} onDeleteClick={onDeleteClick} fetchData={fetchData} />
         <ul className="pagination">
           <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
             <button className="page-link" onClick={handlePrevPage}>
@@ -137,25 +132,21 @@ const MyComponent = () => {
           {Array.from({ length: totalPages }, (_, index) => (
             <li
               key={index + 1}
-              className={`page-item ${
-                index + 1 === currentPage ? "active" : ""
-              }`}
+              className={`page-item ${index + 1 === currentPage ? "active" : ""}`}
             >
               <button
                 className="page-link"
-                onClick={() => setCurrentPage(index + 1)}
+                onClick={() => setState((prevState) => ({ ...prevState, currentPage: index + 1 }))}
               >
                 {index + 1}
               </button>
             </li>
           ))}
           <li
-            className={`page-item ${
-              currentPage === totalPages ? "disabled" : ""
-            }`}
+            className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
           >
             <button className="page-link" onClick={handleNextPage}>
-             {access[1]}
+              {access[1]}
             </button>
           </li>
         </ul>

@@ -43,6 +43,7 @@ const headers = {
       Authorization: `Bearer 7ba28fd99cf99393c57d796ef80869a17bb6fb2b1d9d21ff02de0ed0711489c7`,
     },
 };
+
   
 const offcanvasTitleText = ["offcanvas","Add New User"];
 
