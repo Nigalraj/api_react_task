@@ -44,6 +44,10 @@ const headers = {
     },
 };
   
- 
+const offcanvasTitleText = ["offcanvas","Add New User"];
 
-export {columns, columns_1,columns_2,user,adduser,genderOptions,statusOptions,headers};
+const number = [1,10];
+
+const access = ["previous","next","Edit User","User Details","Add User"];
+
+export {columns, columns_1,columns_2,user,adduser,genderOptions,statusOptions,headers,offcanvasTitleText,access,number};

@@ -22,7 +22,7 @@ const EditForm = ({ data, onUpdateClick, onCancel }) => {
       <form>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">
-            {user.name}
+            {user?.name}
           </label>
           <input
             type="text"
@@ -34,7 +34,7 @@ const EditForm = ({ data, onUpdateClick, onCancel }) => {
         </div>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
-            {user.email}
+            {user?.email}
           </label>
           <input
             type="email"
@@ -46,7 +46,7 @@ const EditForm = ({ data, onUpdateClick, onCancel }) => {
         </div>
         <div className="mb-3">
           <label htmlFor="gender" className="form-label">
-           {user.gender}
+           {user?.gender}
           </label>
           <select
             name="gender"
@@ -54,7 +54,7 @@ const EditForm = ({ data, onUpdateClick, onCancel }) => {
             onChange={handleInputChange}
             className="form-select"
           >
-            {genderOptions.map((option) => (
+            {genderOptions?.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
@@ -63,7 +63,7 @@ const EditForm = ({ data, onUpdateClick, onCancel }) => {
         </div>
         <div className="mb-3">
           <label htmlFor="status" className="form-label">
-            {user.status}
+            {user?.status}
           </label>
           <input
             type="text"
@@ -75,10 +75,10 @@ const EditForm = ({ data, onUpdateClick, onCancel }) => {
 
         </div>
         <button type="button" onClick={handleUpdateClick} className="btn btn-primary">
-          {adduser.update}
+          {adduser?.update}
         </button>
-        <button type="button" onClick={onCancel} className=" ms-2 btn btn-secondary">
-          {adduser.cancel}
+        <button type="button" onClick={()=> onCancel(false)} className=" ms-2 btn btn-secondary">
+          {adduser?.cancel}
         </button>
       </form>
     </div>

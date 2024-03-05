@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import {columns_1, headers}  from '../utils/data';
+import { columns_1, headers, access } from '../utils/data';
 
 const UserDetails = () => {
-  
   const { userId } = useParams();
   const [userDetails, setUserDetails] = useState(null);
 
-  useEffect(() => {
+  const fetchUserDetails = () => {
     if (userId) {
-      axios.get(`https://gorest.co.in/public/v2/users/${userId}`,headers)
-        .then(response => {
-            setUserDetails(response.data)
+      axios
+        .get(`https://gorest.co.in/public/v2/users/${userId}`, headers)
+        .then((response) => {
+          setUserDetails(response.data);
         })
-        .catch(error => console.error('Error fetching user details:', error));
+        .catch((error) => console.error('Error fetching user details:', error));
     }
+  };
+
+  useEffect(() => {
+    fetchUserDetails();
   }, [userId]);
 
   if (!userDetails) {
@@ -24,18 +28,18 @@ const UserDetails = () => {
 
   return (
     <div className="container mt-5">
-      <h2>User Details</h2>
+      <h2>{access[3]}</h2>
       <div className="table-responsive">
         <table className="table table-bordered">
-        <thead className="thead-dark">
-      <tr>
-        {columns_1.map((column) => (
-          <th key={column.key} scope="col">
-            {column.label}
-          </th>
-        ))}
-      </tr>
-    </thead>
+          <thead className="thead-dark">
+            <tr>
+              {columns_1?.map((column) => (
+                <th key={column.key} scope="col">
+                  {column.label}
+                </th> 
+              ))}
+            </tr>
+          </thead>
           <tbody>
             <tr>
               <td>{userDetails.id}</td>

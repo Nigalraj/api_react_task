@@ -11,16 +11,21 @@ function Sidebar({ onSelectUser }) {
   const [isAccordionOpen, setIsAccordionOpen] = useState("search");
 
   const toggleAccordion = (title) => {
+    fetch();
     setIsAccordionOpen(title);
   };
   
-  useEffect(() => {
-    axios
+const fetch = () =>{
+  axios
       .get("https://gorest.co.in/public/v2/users?page=1&per_page=100",headers)
       .then((response) => {
         setUsers(response.data);
       })
       .catch((error) => console.error("Error fetching users:", error));
+}
+
+  useEffect(() => {
+    fetch();
   }, []);
 
   const handleUserSelection = (user) => {
@@ -50,7 +55,7 @@ function Sidebar({ onSelectUser }) {
         <Accordion.Body className="overflow-auto">
           <div className="user-list-container">
             <ul className="list-group">
-              {users.map((user) => (
+              {users?.map((user) => (
                 <li key={user.id} className="list-group-item overflow-auto">
                   <div className="form-check">
                     <input
@@ -77,12 +82,12 @@ function Sidebar({ onSelectUser }) {
         className={`custom-accordion-button ${isAccordionOpen === "Name" ? 'open' : 'close'}`}
         onClick={ () =>toggleAccordion("Name")}
       >
-        {user.name}
+        {user?.name}
       </AccordionButton>
           <Accordion.Body className="overflow-auto">
             <div className="user-list-container">
               <ul className="list-group">
-                {users.map((user) => (
+                {users?.map((user) => (
                   <li key={user.id} className="list-group-item">
                     <div className="form-check">
                       <input
@@ -116,7 +121,7 @@ function Sidebar({ onSelectUser }) {
           <Accordion.Body className="overflow-auto">
             <div className="user-list-container">
               <ul className="list-group">
-                {users.map((user) => (
+                {users?.map((user) => (
                   <li key={user.id} className="list-group-item overflow-auto">
                     <div className="form-check">
                       <input

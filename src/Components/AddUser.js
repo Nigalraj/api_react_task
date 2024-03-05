@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { Form, Button } from "react-bootstrap";
-import { adduser, statusOptions, genderOptions,headers } from "../utils/data";
+import { adduser, statusOptions, genderOptions,headers,access } from "../utils/data";
 
 
 const emailSchema = Yup.string()
@@ -85,7 +85,7 @@ const UserForm = ({ close, fetchData }) => {
           isInvalid={formik.touched.gender && formik.errors.gender}
           required
         >
-          {genderOptions.map((option) => (
+          {genderOptions?.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
@@ -105,7 +105,7 @@ const UserForm = ({ close, fetchData }) => {
           isInvalid={formik.touched.status && formik.errors.status}
           required
         >
-          {statusOptions.map((option) => (
+          {statusOptions?.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
@@ -118,14 +118,10 @@ const UserForm = ({ close, fetchData }) => {
       <Button
         variant="primary"
         type="submit"
-        onClick={() => {
-          if (formik.isValid) {
-            close();
-          }
-        }}
+        onClick={() => {formik.isValid&&close()}}
         disabled={!formik.isValid || !formik.dirty}
       >
-        Add User
+        {access[4]}
       </Button>
     </Form>
   );

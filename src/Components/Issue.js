@@ -10,8 +10,8 @@ import {
   Button,
 } from "react-bootstrap";
 import Table from "./Tables";
-import { columns } from "../utils/data";
-import { headers } from "../utils/data";
+import { columns,headers,offcanvasTitleText,access,number } from "../utils/data";
+
 
 const MyComponent = () => {
   const [show, setShow] = useState(false);
@@ -20,8 +20,9 @@ const MyComponent = () => {
 
   const [selectedRow, setSelectedRow] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(9);
+  const [currentPage, setCurrentPage] = useState(number[0]);
+
+  const itemsPerPage = number[1];
 
   const onDeleteClick = async (id) => {
     try {
@@ -42,7 +43,7 @@ const MyComponent = () => {
 
       const updatedDataList = data.map((item) =>
         item.id === id ? { ...item, ...updatedData } : item
-      );
+      ); 
       setData(updatedDataList);
       setSelectedRow(null);
       console.log("Updated Data:", { id, updatedData });
@@ -113,11 +114,11 @@ const MyComponent = () => {
              onClick={() => setShow(true)}
             className="btn-hover color m-0 w-100 text-white "
           >
-            Add New User
+            {offcanvasTitleText[1]}
           </Button>
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-              <Modal.Title>Add New User</Modal.Title>
+              <Modal.Title>{offcanvasTitleText}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Adduser close={handleClose} fetchData={fetchData} />
@@ -130,7 +131,7 @@ const MyComponent = () => {
         <ul className="pagination">
           <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
             <button className="page-link" onClick={handlePrevPage}>
-              Previous
+              {access[0]}
             </button>
           </li>
           {Array.from({ length: totalPages }, (_, index) => (
@@ -154,14 +155,14 @@ const MyComponent = () => {
             }`}
           >
             <button className="page-link" onClick={handleNextPage}>
-              Next
+             {access[1]}
             </button>
           </li>
         </ul>
       </div>
       <Modal show={modalData} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit User</Modal.Title>
+          <Modal.Title>{access[2]}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedRow && (

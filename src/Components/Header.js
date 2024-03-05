@@ -4,6 +4,7 @@ import { Icon } from "@iconify/react";
 import { useState } from "react";
 import Sidebar from "./Sidebar";
 import imagePaths from "../Asset/index";
+import {offcanvasTitleText} from "../utils/data"
 
 function Header() {
   const [show, setShow] = useState(false);
@@ -19,7 +20,7 @@ function Header() {
           </Button>
           <Offcanvas show={show} onHide={() => setShow(false)}>
             <Offcanvas.Header closeButton>
-              <Offcanvas.Title>offcanvas</Offcanvas.Title>
+              <Offcanvas.Title>{offcanvasTitleText}</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
               <Sidebar/>
