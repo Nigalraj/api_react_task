@@ -4,6 +4,7 @@ import axios from "axios";
 import { Accordion, AccordionButton, AccordionCollapse } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import {headers, user} from '../utils/data'
+import ApiServices from "../Constants/ApiServices";
 
 function Sidebar({ onSelectUser }) {
   const [users, setUsers] = useState([]);
@@ -16,9 +17,9 @@ function Sidebar({ onSelectUser }) {
   };
   
 const fetch = () =>{
-  axios
-      .get("https://gorest.co.in/public/v2/users?page=1&per_page=100",headers)
+ ApiServices.getData()
       .then((response) => {
+        console.log(response);
         setUsers(response.data);
       })
       .catch((error) => console.error("Error fetching users:", error));

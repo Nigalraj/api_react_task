@@ -3,14 +3,16 @@ import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import Adduser from "./AddUser";
 import EditForm from "./EditUser";
-import {
-  Container,
-  InputGroup,
-  FormControl,
-  Button,
-} from "react-bootstrap";
+import { Container, InputGroup, FormControl, Button } from "react-bootstrap";
 import Table from "./Tables";
-import { columns, headers, offcanvasTitleText, access, number } from "../utils/data";
+import {
+  columns,
+  headers,
+  offcanvasTitleText,
+  access,
+  number,
+} from "../utils/data";
+import ApiServices from "../Constants/ApiServices";
 
 const MyComponent = () => {
   const [state, setState] = useState({
@@ -22,15 +24,13 @@ const MyComponent = () => {
     currentPage: number[0],
   });
 
-  const { show, data, modalData, selectedRow, searchQuery, currentPage } = state;
-
   const itemsPerPage = number[1];
 
   const onDeleteClick = async (id) => {
     try {
-      await axios.delete(`https://gorest.co.in/public/v2/users/${id}`, headers);
+      await ApiServices.deleteData(id)
       fetchData();
-      const updatedData = data.data.filter((item) => item.id !== id);
+      const updatedData = state.data.filter((item) => item.id !== id);
       setState((prevState) => ({ ...prevState, data: updatedData }));
     } catch (error) {
       console.error("Error deleting item:", error);
@@ -39,11 +39,16 @@ const MyComponent = () => {
 
   const onUpdateClick = async (id, updatedData) => {
     try {
-      await axios.put(`https://gorest.co.in/public/v2/users/${id}`, updatedData, headers);
-      const updatedDataList = data.map((item) =>
+      await ApiServices.putData(id,updatedData)
+
+      const updatedDataList = state.data.map((item) =>
         item.id === id ? { ...item, ...updatedData } : item
       );
-      setState((prevState) => ({ ...prevState, data: updatedDataList, selectedRow: null }));
+      setState((prevState) => ({
+        ...prevState,
+        data: updatedDataList,
+        selectedRow: null,
+      }));
       console.log("Updated Data:", { id, updatedData });
     } catch (error) {
       console.error("Error updating data:", error);
@@ -52,7 +57,7 @@ const MyComponent = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("https://gorest.co.in/public/v2/users?page=1&per_page=100", headers);
+      const response = await ApiServices.getData()
       setState((prevState) => ({ ...prevState, data: response.data }));
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -63,23 +68,31 @@ const MyComponent = () => {
     fetchData();
   }, []);
 
-  const filteredData = data.filter((item) =>
+  const filteredData = state.data.filter((item) =>
     Object.values(item).some((value) =>
-      value.toString().toLowerCase().includes(searchQuery.toLowerCase())
+      value.toString().toLowerCase().includes(state.searchQuery.toLowerCase())
     )
   );
 
-  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfLastItem = state.currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const handleNextPage = () => {
-    setState((prevState) => ({ ...prevState, currentPage: Math.min(prevState.currentPage + 1, totalPages) }));
+    setState((prevState) => ({
+      ...prevState,
+      currentPage: Math.min(prevState.currentPage + 1, totalPages),
+    }));
   };
 
   const handleClose = () => {
-    setState((prevState) => ({ ...prevState, show: false, modalData: false, selectedRow: null }));
+    setState((prevState) => ({
+      ...prevState,
+      show: false,
+      modalData: false,
+      selectedRow: null,
+    }));
   };
 
   const handleEditClick = (id) => {
@@ -87,7 +100,10 @@ const MyComponent = () => {
   };
 
   const handlePrevPage = () => {
-    setState((prevState) => ({ ...prevState, currentPage: Math.max(prevState.currentPage - 1, 1) }));
+    setState((prevState) => ({
+      ...prevState,
+      currentPage: Math.max(prevState.currentPage - 1, 1),
+    }));
   };
 
   return (
@@ -98,20 +114,27 @@ const MyComponent = () => {
             <FormControl
               type="text"
               placeholder="Search "
-              value={searchQuery}
-              onChange={(e) => setState((prevState) => ({ ...prevState, searchQuery: e.target.value }))}
+              value={state.searchQuery}
+              onChange={(e) =>
+                setState((prevState) => ({
+                  ...prevState,
+                  searchQuery: e.target.value,
+                }))
+              }
             />
           </InputGroup>
         </div>
         <div className="col-6 col-md-3">
           <Button
             variant="primary"
-            onClick={() => setState((prevState) => ({ ...prevState, show: true }))}
+            onClick={() =>
+              setState((prevState) => ({ ...prevState, show: true }))
+            }
             className="btn-hover color m-0 w-100 text-white "
           >
             {offcanvasTitleText[1]}
           </Button>
-          <Modal show={show} onHide={handleClose}>
+          <Modal show={state.show} onHide={handleClose}>
             <Modal.Header closeButton>
               <Modal.Title>{offcanvasTitleText}</Modal.Title>
             </Modal.Header>
@@ -122,9 +145,21 @@ const MyComponent = () => {
         </div>
       </div>
       <div style={{ overflowX: "auto" }}>
-        <Table columns={columns} currentItems={currentItems} handleEditClick={handleEditClick} onDeleteClick={onDeleteClick} fetchData={fetchData} />
+        <Table
+          columns={columns}
+          currentItems={currentItems}
+          handleEditClick={handleEditClick}
+          setModalData={() =>
+            setState((prevState) => ({ ...prevState, modalData: true }))
+          }
+          onDeleteClick={onDeleteClick}
+          fetchData={fetchData}
+        />
+        {/* <Table columns={columns} currentItems={currentItems} handleEditClick={handleEditClick} setModalData={setModalData} onDeleteClick={onDeleteClick} fetchData={fetchData} /> */}
         <ul className="pagination">
-          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+          <li
+            className={`page-item ${state.currentPage === 1 ? "disabled" : ""}`}
+          >
             <button className="page-link" onClick={handlePrevPage}>
               {access[0]}
             </button>
@@ -132,18 +167,27 @@ const MyComponent = () => {
           {Array.from({ length: totalPages }, (_, index) => (
             <li
               key={index + 1}
-              className={`page-item ${index + 1 === currentPage ? "active" : ""}`}
+              className={`page-item ${
+                index + 1 === state.currentPage ? "active" : ""
+              }`}
             >
               <button
                 className="page-link"
-                onClick={() => setState((prevState) => ({ ...prevState, currentPage: index + 1 }))}
+                onClick={() =>
+                  setState((prevState) => ({
+                    ...prevState,
+                    currentPage: index + 1,
+                  }))
+                }
               >
                 {index + 1}
               </button>
             </li>
           ))}
           <li
-            className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
+            className={`page-item ${
+              state.currentPage === totalPages ? "disabled" : ""
+            }`}
           >
             <button className="page-link" onClick={handleNextPage}>
               {access[1]}
@@ -151,16 +195,16 @@ const MyComponent = () => {
           </li>
         </ul>
       </div>
-      <Modal show={modalData} onHide={handleClose}>
+      <Modal show={state.modalData} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>{access[2]}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {selectedRow && (
+          {state.selectedRow && (
             <EditForm
-              data={data.find((item) => item.id === selectedRow)}
+              data={state.data.find((item) => item.id === state.selectedRow)}
               onUpdateClick={(updatedData) =>
-                onUpdateClick(selectedRow, updatedData)
+                onUpdateClick(state.selectedRow, updatedData)
               }
               onCancel={handleClose}
             />

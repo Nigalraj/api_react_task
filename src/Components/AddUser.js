@@ -3,8 +3,14 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { Form, Button } from "react-bootstrap";
-import { adduser, statusOptions, genderOptions,headers,access } from "../utils/data";
-
+import {
+  adduser,
+  statusOptions,
+  genderOptions,
+  headers,
+  access,
+} from "../utils/data";
+import ApiServices from "../Constants/ApiServices";
 
 const emailSchema = Yup.string()
   .email("Invalid email address")
@@ -29,9 +35,7 @@ const UserForm = ({ close, fetchData }) => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(
-          "https://gorest.co.in/public/v2/users",
-          values,headers);
+        const response = await ApiServices.createData(values)
         fetchData();
         console.log("Success:", response.data);
         formik.resetForm();
@@ -85,11 +89,13 @@ const UserForm = ({ close, fetchData }) => {
           isInvalid={formik.touched.gender && formik.errors.gender}
           required
         >
-          {genderOptions?.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
+          {genderOptions &&
+            genderOptions.length > 0 &&
+            genderOptions?.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
         </Form.Select>
         <Form.Control.Feedback type="invalid">
           {formik.errors.gender}
@@ -118,7 +124,9 @@ const UserForm = ({ close, fetchData }) => {
       <Button
         variant="primary"
         type="submit"
-        onClick={() => {formik.isValid&&close()}}
+        onClick={() => {
+          formik.isValid && close();
+        }}
         disabled={!formik.isValid || !formik.dirty}
       >
         {access[4]}

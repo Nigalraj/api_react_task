@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { columns_1, headers, access } from '../utils/data';
+import ApiServices from '../Constants/ApiServices';
 
 const UserDetails = () => {
   const { userId } = useParams();
@@ -9,8 +10,7 @@ const UserDetails = () => {
 
   const fetchUserDetails = () => {
     if (userId) {
-      axios
-        .get(`https://gorest.co.in/public/v2/users/${userId}`, headers)
+      ApiServices.getIdData(userId)
         .then((response) => {
           setUserDetails(response.data);
         })

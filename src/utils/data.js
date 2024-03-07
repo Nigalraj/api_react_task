@@ -44,7 +44,6 @@ const headers = {
     },
 };
 
-  
 const offcanvasTitleText = ["offcanvas","Add New User"];
 
 const number = [1,10];
