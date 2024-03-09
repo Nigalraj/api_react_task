@@ -11,7 +11,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   function (config) {
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`; 
     }
     config.headers["Content-Type"] = "application/json";
     return config;
@@ -34,7 +34,6 @@ instance.interceptors.response.use(
       case 304:
         console.log("not Modified");
         break;
-
       case 400:
         console.log("Bad Request");
         break;

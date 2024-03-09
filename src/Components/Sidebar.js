@@ -31,13 +31,13 @@ const fetch = () =>{
 
   const handleUserSelection = (user) => {
     onSelectUser(user);
-    navigate(`/UserDetails/${user.id}`);
+    navigate(`/Home/UserDetails/${user.id}`);
   };
 
   return (
     <div className=" d-flex flex-column  vh-100 w-100">
       <NavLink
-        to="/"
+        to="/Home/dashboard"
         className={`text-decoration-none  p-3  ${isAccordionOpen === "search" ? 'open':'close'}`}
         onClick={() => toggleAccordion("search")}
       >

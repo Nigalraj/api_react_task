@@ -13,6 +13,8 @@ import {
   number,
 } from "../utils/data";
 import ApiServices from "../Constants/ApiServices";
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const MyComponent = () => {
   const [state, setState] = useState({
@@ -23,6 +25,55 @@ const MyComponent = () => {
     searchQuery: "",
     currentPage: number[0],
   });
+
+  const [mouseMoved, setMouseMoved] = useState(false);
+  
+  const navigate = useNavigate();
+    useEffect(() => {
+      let timeoutId;
+  
+      const handleMouseMove = () => {
+       
+        setMouseMoved(true);
+  
+        clearTimeout(timeoutId);
+  
+        timeoutId = setTimeout(() => {
+          // Use SweetAlert instead of the native alert
+          Swal.fire({
+            title: 'Mouse Inactivity',
+            text: `Mouse has not moved for ${timeoutId} seconds!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Stay',
+            cancelButtonText: 'Logout',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              
+              setMouseMoved(false);
+           
+            } else {
+             
+              console.log('User logged out');
+              navigate('/');
+              
+            }
+          });
+        }, 60000);
+      };
+  
+     
+      document.addEventListener('mousemove', handleMouseMove);
+    
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        clearTimeout(timeoutId);
+        console.log("hi");
+      };
+    }, [navigate]);
+  
 
   const itemsPerPage = number[1];
 
@@ -40,7 +91,6 @@ const MyComponent = () => {
   const onUpdateClick = async (id, updatedData) => {
     try {
       await ApiServices.putData(id,updatedData)
-
       const updatedDataList = state.data.map((item) =>
         item.id === id ? { ...item, ...updatedData } : item
       );
@@ -73,6 +123,8 @@ const MyComponent = () => {
       value.toString().toLowerCase().includes(state.searchQuery.toLowerCase())
     )
   );
+
+
 
   const indexOfLastItem = state.currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -107,6 +159,7 @@ const MyComponent = () => {
   };
 
   return (
+    <>
     <Container>
       <div className="row d-md-flex justify-content-between my-3">
         <div className="col-6 col-md-5 mt-3">
@@ -212,6 +265,7 @@ const MyComponent = () => {
         </Modal.Body>
       </Modal>
     </Container>
+    </>
   );
 };
 
