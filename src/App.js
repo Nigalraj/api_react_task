@@ -4,6 +4,7 @@ import Header from './Components/Header';
 import Sidebar from './Components/Sidebar';
 import { Row, Col } from 'react-bootstrap';
 import Issue from './Components/Issue';
+import { UseSelector, useSelector } from 'react-redux';
 import UserDetails from './Components/UserDetails';
 import './App.css';
 import Attachment from './Components/Attachment'
@@ -13,6 +14,7 @@ import LoginPage from './Components/Login';
 function App() {
   const [selectedUser, setSelectedUser] = useState(null);
 
+  
   const handleSelectUser = (user) => {
     setSelectedUser(user);
   };
@@ -26,7 +28,6 @@ function App() {
             <Sidebar onSelectUser={handleSelectUser}/>
           </Col>
           <Col lg={10} className="px-0">
-            
             <Outlet/>
           </Col>
         </Row>

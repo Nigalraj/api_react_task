@@ -17,7 +17,7 @@ function Sidebar({ onSelectUser }) {
   };
   
 const fetch = () =>{
- ApiServices.getData()
+ ApiServices.getIdData()
       .then((response) => {
         console.log(response);
         setUsers(response.data);

@@ -7,13 +7,9 @@ const ApiServices ={
         const url = id ? `/users/${id}` :"/users";
         return instance.get(url)
     },
-    getData:()=>{
-        return instance.get("/users");
-    },
     createData:(customerData)=>{
         console.log("hi");
         return instance.post("/users",customerData);
-
     },
     putData:(id,customerData)=>{
         return instance.put(`/users/${id}`,customerData);

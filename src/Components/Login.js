@@ -3,36 +3,41 @@ import { useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap'; 
 import Header from './Header';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 import React, { useState, useEffect } from 'react';
-const LoginPage = ({onLogin}) => {
+import { useDispatch, useSelector } from 'react-redux';
+import { LoginAction } from '../redux/actions/LoginAction';
+
+
+const LoginPage = ({setIsSigned}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loggedIn, setLoggedIn] = useState(false);
-    const navigate = useNavigate();
     
-  
+    const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const data = useSelector((state)=>state.Loginstore.LoginModel)
+    
+  console.log(data,"gfhj");
    const handleLogin = async () => {
     try {
+      let payload ={email: email,
+           password: password}
+      dispatch(LoginAction(payload))
       
-      const response = await axios.post(' https://53da-2405-201-e059-b805-6dd6-a3fe-125d-950.ngrok-free.app/api/v1/login', {
-        email: email,
-        password: password,
-      },{
-        headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIzLCJlbWFpbCI6IlRlc3RqQGdtYWlsLmNvbSIsImlhdCI6MTcwOTg3NzUyNiwiZXhwIjoxNzA5ODc5MzI2fQ.rRSHlNSPEYQ-2Gm2-InIsK_W3nP023JVOghfGWbz01M',
-          'Content-Type': 'application/json',
-        },
-      });
-
-
-      if (response.status === 200) {
-        onLogin(response.data.token)
-        setLoggedIn(true);
-        navigate('/Home/dashboard');
-      } else {
+      // const response = await axios.post('https://6da5-2405-201-e059-b805-e5d0-6c8c-c766-33be.ngrok-free.app/api/v1/login', {
+      //   email: email,
+      //   password: password,
+      // });
+      // if (response.status === 200) {
+       
+      //   const token =localStorage.setItem('accesstoken',response.data.token);
+      //   console.log(response.data.token,"v");
+      //   setIsSigned(true);
+      //   navigate('/Home/dashboard');
+      // } else {
         
-        alert('Invalid credentials');
-      }
+      //   alert('Invalid credentials');
+      // }
     } catch (error) {
      
       console.error('Error during login:', error);
@@ -40,8 +45,21 @@ const LoginPage = ({onLogin}) => {
     }
   };
   
+  useEffect(()=>{
+    if(data && data.data){
+      if(data.data.status===200)
+      {
+       setIsSigned(true);
+       navigate('/Home/dashboard');
+      }
+      else {
+         alert('Invalid credentials');
+       }
+    }
+     
+  },[data])
     const handleLogout = () => {
-      setLoggedIn(false);
+
       setEmail(''); 
       setPassword('');
     };
@@ -51,14 +69,7 @@ const LoginPage = ({onLogin}) => {
         <Header />
         <div className='d-flex justify-content-center'>
           <div className='card m-5 p-5'>
-            {loggedIn ? (
-              <div>
-                <h2>Welcome, {email}!</h2>
-                <Button variant="danger" onClick={handleLogout}>
-                  Logout
-                </Button>
-              </div>
-            ) : (
+            
               <div>
                 <h2>Login</h2>
                 <Form>
@@ -85,7 +96,7 @@ const LoginPage = ({onLogin}) => {
                   </Button>
                 </Form>
               </div>
-            )}
+          
           </div>
         </div>
       </>

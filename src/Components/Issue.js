@@ -39,7 +39,7 @@ const MyComponent = () => {
         clearTimeout(timeoutId);
   
         timeoutId = setTimeout(() => {
-          // Use SweetAlert instead of the native alert
+          
           Swal.fire({
             title: 'Mouse Inactivity',
             text: `Mouse has not moved for ${timeoutId} seconds!`,
@@ -107,7 +107,7 @@ const MyComponent = () => {
 
   const fetchData = async () => {
     try {
-      const response = await ApiServices.getData()
+      const response = await ApiServices.getIdData()
       setState((prevState) => ({ ...prevState, data: response.data }));
     } catch (error) {
       console.error("Error fetching data:", error);

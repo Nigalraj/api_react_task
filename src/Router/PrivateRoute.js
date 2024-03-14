@@ -1,19 +1,17 @@
-import React from 'react';
-import { Route, Redirect , Navigate} from 'react-router-dom';
-
-const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      element={
-        isAuthenticated ? (
-          <Component />
-        ) : (
-          <Navigate to="/" replace />
-        )
-      }
-    />
-  );
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+ 
+const Private = ({ isSignedIn, children }) => {
+  const navigate = useNavigate();
+ 
+  useEffect(() => {
+    if (!isSignedIn) {
+      navigate("/");
+    }
+  }, [isSignedIn, navigate]);
+ 
+  return isSignedIn ? children : null;
 };
-
-export default PrivateRoute;
+ 
+ 
+export default Private
